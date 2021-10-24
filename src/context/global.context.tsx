@@ -7,6 +7,8 @@ export interface GlobalContextProps {
   cart: any;
   addToCart: any;
   removeFromCart: any;
+  viewType: boolean;
+  setviewType: any;
 }
 
 export const GlobalContext = React.createContext<GlobalContextProps>({
@@ -15,12 +17,15 @@ export const GlobalContext = React.createContext<GlobalContextProps>({
   cart: [],
   addToCart: undefined,
   removeFromCart: undefined,
+  viewType: false,
+  setviewType: undefined
 });
 
 export const GlobalContextProvider = (props: any) => {
   const [products, setproducts] = React.useState(PRODUCTS);
   const [inventory, setinventory] = React.useState(INVENTORY);
   const [cart, setcart] = React.useState<string[] | []>([]);
+  const [viewType, setviewType] = React.useState(false);
 
   const addToCart = (product: ProductItem) => {
     // update cart
@@ -40,7 +45,7 @@ export const GlobalContextProvider = (props: any) => {
     let _cart = Object.assign([], cart);
     let index = _cart.findIndex((item: string) => item === productId);
     _cart.splice(index, 1);
-    setcart(_cart)
+    setcart(_cart);
   };
 
   return (
@@ -51,6 +56,8 @@ export const GlobalContextProvider = (props: any) => {
         addToCart,
         inventory,
         removeFromCart,
+        viewType,
+        setviewType,
       }}>
       {props.children}
     </GlobalContext.Provider>

@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Alert, Table } from "react-bootstrap";
+import { Alert, Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/global.context";
 import { ProductItem, InvetoryItem } from "../../data/products";
@@ -38,39 +38,71 @@ const ProductList: React.FC<ProductListProps> = () => {
     }
   };
 
+  const toggleView = () => {
+    globalContext.setviewType(!globalContext.viewType);
+  };
+
   return (
     <>
       <h1>Products</h1>
-      <h3>Total items in cart: {globalContext.cart.length}</h3>
-      <Link to="cart">View cart</Link>
+      <h3 className="mb-2">Total items in cart: {globalContext.cart.length}</h3>
+      <Link className="mb-2" to="cart">View cart</Link>
+      <br />
+      <Button className="mb-2" onClick={toggleView}>Toggle view</Button>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Product Name</th>
-            <th>Product Price</th>
-            <th>Product Action</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
+      {globalContext.viewType && (
+        <ul className="list-group">
           {globalContext.products.map((item, index) => (
-            <tr>
-              <td>{item.productName}</td>
-              <td>{item.productPrice}</td>
-              <td>
+            <li>
+              <p>{item.productName}</p>
+              <p>{item.productPrice}</p>
+              <div>
                 <button
                   onClick={() => {
                     handleAddToCartTap(item);
                   }}>
                   Add to cart
                 </button>
-              </td>
-              <td>{checkForStockWarning(item) ? "Limited Stock" : "In stock"}</td>
-            </tr>
+              </div>
+              <div>{checkForStockWarning(item) ? "Limited Stock" : "In stock"}</div>
+            </li>
           ))}
-        </tbody>
-      </Table>
+
+          {/* <li className="list-group-item"></li>
+          <li className="list-group-item">Second item</li> */}
+          {/* <li className="list-group-item">Third item</li> */}
+        </ul>
+      )}
+
+      {!globalContext.viewType && (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Product Price</th>
+              <th>Product Action</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {globalContext.products.map((item, index) => (
+              <tr>
+                <td>{item.productName}</td>
+                <td>{item.productPrice}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      handleAddToCartTap(item);
+                    }}>
+                    Add to cart
+                  </button>
+                </td>
+                <td>{checkForStockWarning(item) ? "Limited Stock" : "In stock"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </>
   );
 };
