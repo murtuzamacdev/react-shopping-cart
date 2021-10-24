@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/global.context";
 import { ProductItem, InvetoryItem } from "../../data/products";
@@ -31,7 +31,7 @@ const ProductList: React.FC<ProductListProps> = () => {
   const checkForStockWarning = (product: ProductItem) => {
     let currentQuantity = globalContext.inventory.find((item) => item.productId === product.productId)?.currentQuantity;
 
-    if (currentQuantity && (currentQuantity <= product.showInventoryWarningLimit)) {
+    if (currentQuantity && currentQuantity <= product.showInventoryWarningLimit) {
       return true;
     } else {
       return false;
@@ -40,20 +40,37 @@ const ProductList: React.FC<ProductListProps> = () => {
 
   return (
     <>
-      <h1>Total items in cart: {globalContext.cart.length}</h1>
+      <h1>Products</h1>
+      <h3>Total items in cart: {globalContext.cart.length}</h3>
       <Link to="cart">View cart</Link>
-      {globalContext.products.map((item, index) => (
-        <>
-          <h3>{item.productName}</h3>
-          <button
-            onClick={() => {
-              handleAddToCartTap(item);
-            }}>
-            Add to cart
-          </button>
-          {checkForStockWarning(item) && <Alert variant={"warning"}>Only few left in stock</Alert>}
-        </>
-      ))}
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Product Price</th>
+            <th>Product Action</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {globalContext.products.map((item, index) => (
+            <tr>
+              <td>{item.productName}</td>
+              <td>{item.productPrice}</td>
+              <td>
+                <button
+                  onClick={() => {
+                    handleAddToCartTap(item);
+                  }}>
+                  Add to cart
+                </button>
+              </td>
+              <td>{checkForStockWarning(item) ? "Limited Stock" : "In stock"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </>
   );
 };

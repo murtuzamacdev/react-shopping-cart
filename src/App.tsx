@@ -9,22 +9,12 @@ import ProductList from "./pages/product-list/ProductList";
 
 function App() {
   return (
-    <div>
+    <div style={{margin:' 200px'}}>
       <GlobalContextProvider>
         <Router>
           <GlobalContext.Consumer>
             {(globalContext) => (
               <div>
-                <nav>
-                  <ul>
-                    <li>
-                      <Link to="/">product list</Link>
-                    </li>
-                    <li>
-                      <Link to="/cart">cart</Link>
-                    </li>
-                  </ul>
-                </nav>
 
                 {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
